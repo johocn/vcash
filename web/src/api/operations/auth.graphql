@@ -1,0 +1,41 @@
+mutation Login($username: String!, $password: String!, $rememberMe: Boolean) {
+  login(username: $username, password: $password, rememberMe: $rememberMe) {
+    ... on CurrentUser {
+      id
+      identifier
+      channels {
+        id
+        token
+        code
+        permissions
+      }
+    }
+    ... on InvalidCredentialsError {
+      errorCode
+      message
+    }
+    ... on NotVerifiedError {
+      errorCode
+      message
+    }
+  }
+}
+
+query Me {
+  me {
+    id
+    identifier
+    channels {
+      id
+      token
+      code
+      permissions
+    }
+  }
+}
+
+mutation Logout {
+  logout {
+    success
+  }
+}

@@ -1,0 +1,101 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+# vendure 本地依赖说明：
+# vcash/server/package.json 通过 file:../../vendure/packages/xxx 引用
+#   cjk-plugin 和 member-level-plugin（johocn/vendure fork）
+# CI 中将 vendure checkout 到 vcash 的同级目录（../vendure）以匹配路径
+
+jobs:
+  backend-test:
+    name: Backend Build & Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout vcash
+        uses: actions/checkout@v4
+
+      - name: Checkout vendure fork（cjk-plugin, member-level-plugin 源码）
+        uses: actions/checkout@v4
+        with:
+          repository: johocn/vendure
+          ref: master
+          path: ../vendure
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.12.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Build plugins
+        run: |
+          pnpm --filter @vcash/pos-plugin build
+          pnpm --filter @vcash/offline-plugin build
+
+      - name: Run server typecheck
+        run: pnpm --filter @vcash/server exec tsc --noEmit
+
+      - name: Run pos-plugin tests
+        run: pnpm --filter @vcash/pos-plugin test
+
+      - name: Run offline-plugin tests
+        run: pnpm --filter @vcash/offline-plugin test
+
+      - name: Upload test artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-logs
+          path: |
+            packages/vcash-pos-plugin/__data__/
+            packages/vcash-offline-plugin/__data__/
+          retention-days: 7
+
+  frontend-check:
+    name: Frontend Typecheck & Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout vcash
+        uses: actions/checkout@v4
+
+      - name: Checkout vendure fork（本地依赖）
+        uses: actions/checkout@v4
+        with:
+          repository: johocn/vendure
+          ref: master
+          path: ../vendure
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.12.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm --filter @vcash/web typecheck
+
+      - name: Build
+        run: pnpm --filter @vcash/web build

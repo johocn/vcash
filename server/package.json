@@ -1,0 +1,32 @@
+{
+  "name": "@vcash/server",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "ts-node index.ts",
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "populate": "ts-node populate.ts",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@vendure/core": "3.6.4",
+    "@vendure/asset-server-plugin": "3.6.4",
+    "@vendure/email-plugin": "3.6.4",
+    "@vendure/cjk-plugin": "file:../../vendure/packages/cjk-plugin",
+    "@vendure/member-level-plugin": "file:../../vendure/packages/member-level-plugin",
+    "@vcash/pos-plugin": "file:../packages/vcash-pos-plugin",
+    "@vcash/offline-plugin": "file:../packages/vcash-offline-plugin",
+    "better-sqlite3": "^11.0.0",
+    "pg": "^8.13.0"
+  },
+  "devDependencies": {
+    "@vendure/testing": "3.6.4",
+    "@types/node": "^20.0.0",
+    "graphql-tag": "^2.12.6",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.4.0",
+    "vitest": "^1.6.0"
+  }
+}

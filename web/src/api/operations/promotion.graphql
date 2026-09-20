@@ -1,0 +1,40 @@
+query PromotionRules($channelId: ID) {
+  promotionRules(channelId: $channelId) {
+    id
+    type
+    name
+    description
+    scope
+    collectionId
+    priority
+    active
+    startTime
+    endTime
+    conditions
+    actions
+    createdAt
+    updatedAt
+  }
+}
+
+mutation CreatePromotionRule($input: CreatePromotionRuleInput!) {
+  createPromotionRule(input: $input) {
+    id
+    type
+    name
+    priority
+    active
+  }
+}
+
+mutation UpdatePromotionRule($input: UpdatePromotionRuleInput!) {
+  updatePromotionRule(input: $input) {
+    id
+    priority
+    active
+  }
+}
+
+mutation DeletePromotionRule($id: ID!) {
+  deletePromotionRule(id: $id)
+}

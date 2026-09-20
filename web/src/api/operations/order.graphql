@@ -1,0 +1,148 @@
+query PosActiveOrder {
+  posActiveOrder {
+    id
+    code
+    state
+    total
+    totalWithTax
+    lines {
+      id
+      productVariant {
+        id
+        sku
+        name
+      }
+      unitPrice
+      unitPriceWithTax
+      quantity
+      linePrice
+      linePriceWithTax
+      customFields {
+        originalPrice
+        discount
+        memberPriceApplied
+        isGift
+        note
+      }
+    }
+  }
+}
+
+mutation AddPosItem($productVariantId: ID!, $quantity: Int!) {
+  addPosItem(input: { productVariantId: $productVariantId, quantity: $quantity }) {
+    id
+    code
+    state
+    total
+    totalWithTax
+    lines {
+      id
+      productVariant {
+        id
+        sku
+        name
+      }
+      unitPrice
+      unitPriceWithTax
+      quantity
+      linePrice
+      linePriceWithTax
+      customFields {
+        originalPrice
+        discount
+        memberPriceApplied
+        isGift
+        note
+      }
+    }
+  }
+}
+
+mutation UpdatePosItem($orderLineId: ID!, $quantity: Int!) {
+  updatePosItem(input: { orderLineId: $orderLineId, quantity: $quantity }) {
+    id
+    code
+    state
+    total
+    totalWithTax
+    lines {
+      id
+      productVariant {
+        id
+        sku
+        name
+      }
+      unitPrice
+      unitPriceWithTax
+      quantity
+      linePrice
+      linePriceWithTax
+      customFields {
+        originalPrice
+        discount
+        memberPriceApplied
+        isGift
+        note
+      }
+    }
+  }
+}
+
+mutation HoldOrder {
+  holdOrder {
+    id
+    code
+    state
+  }
+}
+
+mutation ResumeOrder($orderId: ID!) {
+  resumeOrder(orderId: $orderId) {
+    id
+    code
+    state
+    total
+    totalWithTax
+    lines {
+      id
+      productVariant {
+        id
+        sku
+        name
+      }
+      unitPrice
+      unitPriceWithTax
+      quantity
+      linePrice
+      linePriceWithTax
+      customFields {
+        originalPrice
+        discount
+        memberPriceApplied
+        isGift
+        note
+      }
+    }
+  }
+}
+
+query HeldOrders {
+  heldOrders {
+    id
+    code
+    state
+    total
+    totalWithTax
+    updatedAt
+    lines {
+      id
+      productVariant {
+        id
+        sku
+        name
+      }
+      quantity
+      unitPriceWithTax
+    }
+  }
+}

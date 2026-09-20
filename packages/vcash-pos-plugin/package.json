@@ -1,0 +1,35 @@
+{
+  "name": "@vcash/pos-plugin",
+  "version": "0.1.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@nestjs/common": "11.0.12",
+    "@nestjs/graphql": "13.1.0",
+    "@nestjs/typeorm": "11.0.0",
+    "@vendure/common": "^3.6.4",
+    "@vendure/core": "3.6.4",
+    "graphql-tag": "2.12.6",
+    "typeorm": "0.3.21"
+  },
+  "devDependencies": {
+    "@types/node": "20.0.0",
+    "@vendure/testing": "3.6.4",
+    "husky": "^9.1.7",
+    "typescript": "^5.5.0",
+    "vitest": "1.6.1"
+  },
+  "peerDependencies": {
+    "@vendure/core": "3.6.4"
+  },
+  "overrides": {
+    "@graphql-tools/delegate": "12.0.16",
+    "@graphql-tools/stitch": "10.1.19"
+  }
+}

@@ -1,0 +1,84 @@
+mutation SyncOrders($input: SyncOrdersInput!) {
+  syncOrders(input: $input) {
+    succeeded {
+      idempotencyKey
+      orderId
+      orderCode
+      status
+    }
+    failed {
+      idempotencyKey
+      error
+      code
+      status
+    }
+  }
+}
+
+mutation SyncPayments($input: SyncPaymentsInput!) {
+  syncPayments(input: $input) {
+    succeeded {
+      idempotencyKey
+      paymentId
+      orderId
+      status
+    }
+    failed {
+      idempotencyKey
+      error
+      code
+      status
+    }
+  }
+}
+
+mutation SyncSessions($input: SyncSessionsInput!) {
+  syncSessions(input: $input) {
+    succeeded {
+      idempotencyKey
+      sessionId
+      sessionCode
+      state
+      status
+    }
+    failed {
+      idempotencyKey
+      error
+      code
+      status
+    }
+  }
+}
+
+query SyncProducts($since: DateTime!, $limit: Int!) {
+  syncProducts(since: $since, limit: $limit) {
+    items {
+      variantId
+      sku
+      name
+      price
+      priceWithTax
+      barcode
+      categoryId
+      updatedAt
+    }
+    cursor
+  }
+}
+
+query SyncMembers($since: DateTime!, $limit: Int!) {
+  syncMembers(since: $since, limit: $limit) {
+    items {
+      customerId
+      emailAddress
+      firstName
+      lastName
+      updatedAt
+      customFields {
+        memberLevel
+        points
+      }
+    }
+    cursor
+  }
+}

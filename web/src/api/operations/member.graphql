@@ -1,0 +1,78 @@
+query FindMemberByPhone($phoneNumber: String!) {
+  findMemberByPhone(phoneNumber: $phoneNumber) {
+    customerId
+    firstName
+    lastName
+    emailAddress
+    phoneNumber
+    memberLevel
+    growthValue
+    points
+  }
+}
+
+query FindMemberByCode($code: String!) {
+  findMemberByCode(code: $code) {
+    customerId
+    firstName
+    lastName
+    emailAddress
+    phoneNumber
+    memberLevel
+    growthValue
+    points
+  }
+}
+
+mutation BindSessionMember($customerId: ID!) {
+  bindSessionMember(customerId: $customerId) {
+    id
+    code
+    state
+    customerId
+    customer {
+      id
+      firstName
+      lastName
+    }
+  }
+}
+
+mutation UnbindSessionMember {
+  unbindSessionMember {
+    id
+    code
+    state
+    customerId
+  }
+}
+
+# 扩展 MyPosSession 以携带 customer 信息（供前端进入收银页时恢复会员绑定状态）
+query MyPosSessionWithMember {
+  myPosSession {
+    id
+    code
+    state
+    openedAt
+    openingFloat
+    customerId
+    customer {
+      id
+      firstName
+      lastName
+      phoneNumber
+      emailAddress
+    }
+    terminal {
+      id
+      code
+      name
+    }
+    operator {
+      id
+      identifier
+      firstName
+      lastName
+    }
+  }
+}

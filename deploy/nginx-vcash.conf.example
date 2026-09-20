@@ -1,0 +1,60 @@
+# OpenResty / Nginx 反代配置片段
+# 1Panel 部署：网站 → 创建反代站点 → 在"配置文件"中粘贴此内容
+#
+# 替换占位符：
+#   YOUR_DOMAIN  → 实际域名（如 pos.example.com）
+#   SSL_CERT_PATH / SSL_KEY_PATH → 1Panel 自动申请的证书路径
+#
+# 1Panel 通常自动管理 SSL 证书和续期，只需在反代配置中添加 upstream 和 location 部分
+
+# WebSocket 支持（Vendure GraphQL subscriptions 需要）
+map $http_upgrade $connection_upgrade {
+    default upgrade;
+    ''      close;
+}
+
+server {
+    listen 80;
+    server_name YOUR_DOMAIN;
+    # HTTP 强制跳转 HTTPS
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    server_name YOUR_DOMAIN;
+
+    # SSL 证书（1Panel 申请后自动填充路径，通常在 /opt/1panel/apps/openresty/openresty/www/sites/YOUR_DOMAIN/ssl/）
+    ssl_certificate     SSL_CERT_PATH;
+    ssl_certificate_key SSL_KEY_PATH;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+
+    # 上传文件大小限制（商品图片等资源）
+    client_max_body_size 20m;
+
+    # 反代到 Vendure（本地 3000 端口）
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        # WebSocket 支持（GraphQL subscriptions）
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $connection_upgrade;
+
+        # 超时设置（支付确认等耗时操作）
+        proxy_read_timeout 300s;
+        proxy_send_timeout 300s;
+    }
+
+    # 静态资源缓存（Vendure 已托管 web/dist，这里加缓存头优化）
+    location ~* \.(js|css|woff2?|ttf|eot|svg|png|jpg|jpeg|gif|ico|webp)$ {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_cache_valid 200 1h;
+        add_header Cache-Control "public, max-age=3600";
+    }
+}

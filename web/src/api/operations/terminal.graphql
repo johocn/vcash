@@ -1,0 +1,16 @@
+query PosTerminals($channelId: ID) {
+  posTerminals(channelId: $channelId) {
+    id
+    code
+    name
+    active
+    channel {
+      id
+      code
+    }
+    stockLocation {
+      id
+      name
+    }
+  }
+}

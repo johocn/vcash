@@ -1,0 +1,72 @@
+query PosOrderByCode($code: String!) {
+  posOrderByCode(code: $code) {
+    id
+    code
+    state
+    total
+    totalWithTax
+    createdAt
+    lines {
+      id
+      productVariant {
+        id
+        sku
+        name
+      }
+      unitPriceWithTax
+      quantity
+      linePriceWithTax
+      customFields {
+        originalPrice
+        discount
+        memberPriceApplied
+        isGift
+        note
+      }
+    }
+    payments {
+      id
+      amount
+      method
+      state
+    }
+  }
+}
+
+mutation CreateRefundOrder(
+  $originalOrderId: ID!
+  $refundLines: [RefundLineInput!]!
+) {
+  createRefundOrder(
+    input: { originalOrderId: $originalOrderId, refundLines: $refundLines }
+  ) {
+    refundOrder {
+      id
+      code
+      state
+      total
+      totalWithTax
+      lines {
+        id
+        productVariant {
+          id
+          sku
+          name
+        }
+        unitPriceWithTax
+        quantity
+        linePriceWithTax
+      }
+      payments {
+        id
+        amount
+        method
+        state
+      }
+    }
+    originalOrder {
+      id
+      code
+    }
+  }
+}

@@ -1,0 +1,111 @@
+mutation CreateAggregatePay($aggregatePayCode: String!) {
+  createAggregatePay(input: { aggregatePayCode: $aggregatePayCode }) {
+    id
+    amount
+    state
+    method
+    customFields {
+      aggregatePayCode
+      aggregatePayStatus
+    }
+  }
+}
+
+query AggregatePayByCode($aggregatePayCode: String!) {
+  aggregatePayByCode(aggregatePayCode: $aggregatePayCode) {
+    id
+    state
+    method
+    amount
+    customFields {
+      aggregatePayCode
+      aggregatePayStatus
+    }
+    order {
+      id
+      state
+    }
+  }
+}
+
+mutation ConfirmAggregatePay($paymentId: ID!) {
+  confirmAggregatePay(paymentId: $paymentId) {
+    id
+    state
+    customFields {
+      aggregatePayStatus
+    }
+  }
+}
+
+mutation SettleAggregatePay($paymentId: ID!) {
+  settleAggregatePay(paymentId: $paymentId) {
+    id
+    state
+    method
+    amount
+    customFields {
+      aggregatePayStatus
+    }
+  }
+}
+
+mutation FailAggregatePay($paymentId: ID!) {
+  failAggregatePay(paymentId: $paymentId) {
+    id
+    state
+    customFields {
+      aggregatePayStatus
+    }
+  }
+}
+
+mutation CheckoutPosOrder($payments: [CheckoutPaymentInput!]!) {
+  checkoutPosOrder(input: { payments: $payments }) {
+    order {
+      id
+      code
+      state
+      total
+      totalWithTax
+      lines {
+        id
+        productVariant {
+          id
+          sku
+          name
+        }
+        unitPriceWithTax
+        quantity
+        linePriceWithTax
+      }
+    }
+    payments {
+      id
+      amount
+      state
+      method
+    }
+  }
+}
+
+mutation CloseSession($sessionId: ID!, $closingCash: Int, $approverId: ID) {
+  closeSession(
+    input: { sessionId: $sessionId, closingCash: $closingCash, approverId: $approverId }
+  ) {
+    session {
+      id
+      code
+      state
+      openedAt
+      closedAt
+      openingFloat
+      closingCash
+    }
+    summary
+  }
+}
+
+query ShiftReportPreview($sessionId: ID!, $closingCash: Int) {
+  shiftReportPreview(sessionId: $sessionId, closingCash: $closingCash)
+}

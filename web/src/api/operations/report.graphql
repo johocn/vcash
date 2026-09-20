@@ -1,0 +1,62 @@
+query TodayOverview {
+  todayOverview {
+    date
+    totalAmount
+    orderCount
+    avgOrderValue
+    refundAmount
+    refundCount
+    paymentsByMethod {
+      method
+      count
+      amount
+    }
+  }
+}
+
+query SalesReport($startDate: String!, $endDate: String!) {
+  salesReport(startDate: $startDate, endDate: $endDate) {
+    startDate
+    endDate
+    totalAmount
+    totalOrders
+    avgOrderValue
+    daily {
+      date
+      totalAmount
+      orderCount
+      avgOrderValue
+    }
+  }
+}
+
+query MonthlyReport($year: Int!, $month: Int!) {
+  monthlyReport(year: $year, month: $month) {
+    year
+    month
+    totalAmount
+    orderCount
+    avgOrderValue
+    prevMonth {
+      totalAmount
+      orderCount
+    }
+    amountChangeRate
+    countChangeRate
+  }
+}
+
+query TopProducts($startDate: String!, $endDate: String!, $limit: Int, $sortBy: String) {
+  topProducts(startDate: $startDate, endDate: $endDate, limit: $limit, sortBy: $sortBy) {
+    startDate
+    endDate
+    items {
+      variantId
+      variantName
+      productName
+      sku
+      totalQuantity
+      totalAmount
+    }
+  }
+}

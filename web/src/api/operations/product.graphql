@@ -1,0 +1,79 @@
+query Products($term: String, $take: Int, $skip: Int) {
+  products(
+    options: {
+      filter: { name: { contains: $term } }
+      take: $take
+      skip: $skip
+    }
+  ) {
+    items {
+      id
+      name
+      slug
+      variants {
+        id
+        sku
+        name
+        price
+        priceWithTax
+      }
+      featuredAsset {
+        preview
+      }
+    }
+    totalItems
+  }
+}
+
+query Collections {
+  collections {
+    items {
+      id
+      name
+      slug
+      featuredAsset {
+        preview
+      }
+    }
+  }
+}
+
+query CollectionProducts($collectionId: ID!, $take: Int, $skip: Int) {
+  collection(id: $collectionId) {
+    id
+    name
+    productVariants(options: { take: $take, skip: $skip }) {
+      items {
+        id
+        sku
+        name
+        price
+        priceWithTax
+        product {
+          id
+          name
+          featuredAsset {
+            preview
+          }
+        }
+      }
+      totalItems
+    }
+  }
+}
+
+query ProductVariantBySku($sku: String!) {
+  productVariants(options: { filter: { sku: { eq: $sku } } }) {
+    items {
+      id
+      sku
+      name
+      price
+      priceWithTax
+      product {
+        id
+        name
+      }
+    }
+  }
+}

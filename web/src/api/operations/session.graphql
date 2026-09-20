@@ -1,0 +1,58 @@
+query MyPosSession {
+  myPosSession {
+    id
+    code
+    state
+    openedAt
+    openingFloat
+    terminal {
+      id
+      code
+      name
+    }
+    operator {
+      id
+      identifier
+      firstName
+      lastName
+    }
+  }
+}
+
+mutation OpenSession($terminalCode: String!, $openingFloat: Int) {
+  openSession(input: { terminalCode: $terminalCode, openingFloat: $openingFloat }) {
+    id
+    code
+    state
+    openedAt
+    openingFloat
+    terminal {
+      id
+      code
+      name
+    }
+    operator {
+      id
+      identifier
+      firstName
+      lastName
+    }
+  }
+}
+
+mutation CloseSession($sessionId: ID!, $closingCash: Int, $approverId: ID) {
+  closeSession(
+    input: { sessionId: $sessionId, closingCash: $closingCash, approverId: $approverId }
+  ) {
+    session {
+      id
+      code
+      state
+      openedAt
+      closedAt
+      openingFloat
+      closingCash
+    }
+    summary
+  }
+}

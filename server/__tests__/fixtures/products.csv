@@ -1,0 +1,4 @@
+name,slug,description,assets,facets,optionGroups,optionValues,sku,price,taxCategory,stockOnHand,trackInventory,variantAssets,variantFacets
+可口可乐 330ml,coke-330ml,可口可乐 330ml 听装,,,,,COKE-330,3.00,standard,100,false,,
+雪碧 500ml,sprite-500ml,雪碧 500ml 瓶装,,,,,SPRITE-500,3.50,standard,100,false,,
+苹果（计重）,apple-001,苹果按重量销售,,,,,APPLE-001,8.00,standard,100,false,,
